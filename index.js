@@ -9,10 +9,22 @@ const geocoder = new Geocoder(API_KEY);
 const weather = new Weather(API_KEY);
 const userInterface = new UserInterface();
 async function main() {
-  const locations = await geocoder.getLocation("London");
-  const location = userInterface.askForSpecificLocation(locations);
-  const weatherInfo = await weather.getWeather(location);
-  console.log(weatherInfo);
+  // const locations = await geocoder.getLocation("London");
+  // const location = userInterface.askForSpecificLocation(locations);
+  // const weatherInfo = await weather.getWeather(location);
+  // userInterface.displayWeather(weatherInfo);
+  userInterface.intro();
+  while (true) {
+    const query = userInterface.askForLocation();
+    const locations = await geocoder.getLocation(query);
+    const location = userInterface.askForSpecificLocation(locations);
+    const weatherData = await weather.getWeather(location);
+    userInterface.displayWeather(weatherData);
+    const repeat = userInterface.requestMoreWeather();
+    if (repeat == false) {
+      break;
+    }
+  }
 }
 
 main();
